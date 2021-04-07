@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/recipes/6034dc2d962dd0239435f046
+Content-Type: application/json
+
+{
+    "title": "my new recipe updated", 
+    "ingredients": ["only onion now"], 
+    "directions": "Directions are easy now :-)"
+}

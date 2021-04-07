@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/recipes 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlkIjoiNjAzOTI2OWExM2Q5YWQwN2M0NmJiYWYwIiwiaWF0IjoxNjE3NzY0MjA2fQ.uE9cYe05jEpbBDiT50jkt55V5bWe_VwPRkr9JylTNzg
+Content-type: application/json
+
+{
+    "title": "my test recipe 3",
+    "ingredients": ["tomato", "onion"], 
+    "directions": "Chop chop!"
+}
