@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/recipes/60735900c29371559451281f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlkIjoiNjAzOTI2OWExM2Q5YWQwN2M0NmJiYWYwIiwiaWF0IjoxNjE4MTcyNzAyfQ.dq3qwN99EmWWH-vzeqPV1v4RM6SgbzarVqvG_1zeR6A
+
+{
+    "title": "my new recipe updated", 
+    "ingredients": ["only onion now"], 
+    "directions": "Typescript <32"
+}
