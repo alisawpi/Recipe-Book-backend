@@ -2,27 +2,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { UserToken } from '../types';
 
-/*STRING */
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
 };
 const parseStringField = (name: any): string => {
     if (!name || !isString(name)) {
-        throw new Error(`Incorrect or missing field: ${name}`);
+        throw { name: 'Incorrect or missing field' };
     }
     return name;
 };
 
 export const parseStringArray = (array: any): string[] => {
     if (!array || !Array.isArray(array) || !array.every(item => typeof item === 'string')) {
-        throw new Error(`Incorrect or missing field: ${name}`);
+        throw { name: 'Incorrect or missing field' };
     }
     return array as string[];
 };
 
-
-/*VALIDATE NEW PATIENT INFO */
 interface NewUserInfo {
     username: string, 
     password: string
@@ -33,15 +31,24 @@ export const validateUserInfo = (object: any): NewUserInfo => {
         password: parseStringField(object.password)
     };
 };
+export const validateUserToken = (object: any): UserToken => {
+    if (!object.user) throw {name: 'No token!'};
+    return {
+        username: parseStringField(object.user.username),
+        id: parseStringField(object.user.id) 
+    };
+};
 interface NewRecipeInfo {
     title: string, 
     ingredients: string[], 
-    directions: string
+    directions: string, 
+    creator: string
 }
 export const validateRecipe = (object: any): NewRecipeInfo => {
     return {
         title: parseStringField(object.title),
         ingredients: parseStringArray(object.ingredients),
-        directions: parseStringField(object.directions)
+        directions: parseStringField(object.directions), 
+        creator: parseStringField(object.user.id)
     };
 };

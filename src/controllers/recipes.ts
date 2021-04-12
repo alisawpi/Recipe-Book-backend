@@ -1,14 +1,10 @@
 import express from 'express';
 import Recipe from '../models/recipe';
-import { validateRecipe } from '../utils/validation';
+import { validateRecipe, validateUserToken } from '../utils/validation';
 
 const recipeRouter = express.Router();
 
-/*PING ENDPOINT */
-recipeRouter.get('/ping', (_req, res) => {
-    console.log('someone pinged here');
-    res.send('pong');
-});
+/* URL /api/recipes */
 
 /* GET ALL RECIPES */
 recipeRouter.get('/', async (_req, res) => {
@@ -23,7 +19,9 @@ recipeRouter.get('/:id', async (req, res) => {
 });
 /* CREATE RECIPE WITH POST */
 recipeRouter.post('/', async (req, res) => {
-    const recipeInfo = validateRecipe(req.body);
+    const creator = validateUserToken(req.body);
+    let recipeInfo = validateRecipe(req.body); 
+    recipeInfo = {...recipeInfo, creator: creator.id};
     const newRecipe = new Recipe(recipeInfo);
     await newRecipe.save();
     res.status(201).end();
@@ -32,7 +30,17 @@ recipeRouter.post('/', async (req, res) => {
 /* EDIT RECIPE WITH POST */
 recipeRouter.post('/:id', async (req, res) => {
     const id = req.params.id;
+    const user = validateUserToken(req.body); 
     const newRecipeInfo = validateRecipe(req.body);
+    const recipeToUpdate = await Recipe.findById(id);
+    if (!recipeToUpdate){
+        res.status(404).end();
+        return; 
+    }
+    if (recipeToUpdate.creator.toString() !== user.id){
+        res.status(401).end();
+        return;
+    }
     await Recipe.findByIdAndUpdate(id, newRecipeInfo);
     res.status(200).send(newRecipeInfo);
 });
@@ -41,7 +49,16 @@ recipeRouter.post('/:id', async (req, res) => {
 
 recipeRouter.post('/:id/delete', async (req, res) => {
     const id = req.params.id;
-    console.log(req.body);
+    const user = validateUserToken(req.body);
+    const recipeToDelete = await Recipe.findById(id); 
+    if (!recipeToDelete) {
+        res.status(404).end(); 
+        return; 
+    }
+    if (recipeToDelete.creator.toString() !== user.id){
+        res.status(401).end(); 
+        return; 
+    }
     await Recipe.findByIdAndDelete(id);
     res.status(200).end();
 });

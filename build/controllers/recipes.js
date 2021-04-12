@@ -16,11 +16,7 @@ const express_1 = __importDefault(require("express"));
 const recipe_1 = __importDefault(require("../models/recipe"));
 const validation_1 = require("../utils/validation");
 const recipeRouter = express_1.default.Router();
-/*PING ENDPOINT */
-recipeRouter.get('/ping', (_req, res) => {
-    console.log('someone pinged here');
-    res.send('pong');
-});
+/* URL /api/recipes */
 /* GET ALL RECIPES */
 recipeRouter.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const recipes = yield recipe_1.default.find({});
@@ -34,7 +30,9 @@ recipeRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 /* CREATE RECIPE WITH POST */
 recipeRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const recipeInfo = validation_1.validateRecipe(req.body);
+    const creator = validation_1.validateUserToken(req.body);
+    let recipeInfo = validation_1.validateRecipe(req.body);
+    recipeInfo = Object.assign(Object.assign({}, recipeInfo), { creator: creator.id });
     const newRecipe = new recipe_1.default(recipeInfo);
     yield newRecipe.save();
     res.status(201).end();
@@ -42,14 +40,33 @@ recipeRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
 /* EDIT RECIPE WITH POST */
 recipeRouter.post('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
+    const user = validation_1.validateUserToken(req.body);
     const newRecipeInfo = validation_1.validateRecipe(req.body);
+    const recipeToUpdate = yield recipe_1.default.findById(id);
+    if (!recipeToUpdate) {
+        res.status(404).end();
+        return;
+    }
+    if (recipeToUpdate.creator.toString() !== user.id) {
+        res.status(401).end();
+        return;
+    }
     yield recipe_1.default.findByIdAndUpdate(id, newRecipeInfo);
     res.status(200).send(newRecipeInfo);
 }));
 /* DELETE BY ID  */
 recipeRouter.post('/:id/delete', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
-    console.log(req.body);
+    const user = validation_1.validateUserToken(req.body);
+    const recipeToDelete = yield recipe_1.default.findById(id);
+    if (!recipeToDelete) {
+        res.status(404).end();
+        return;
+    }
+    if (recipeToDelete.creator.toString() !== user.id) {
+        res.status(401).end();
+        return;
+    }
     yield recipe_1.default.findByIdAndDelete(id);
     res.status(200).end();
 }));

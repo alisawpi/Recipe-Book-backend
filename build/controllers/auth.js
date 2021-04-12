@@ -19,8 +19,9 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../utils/config"));
 const validation_1 = require("../utils/validation");
 const authRouter = express_1.default.Router();
+/* URL /api/users */
 /* SIGNUP */
-authRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+authRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newUserInfo = validation_1.validateUserInfo(req.body);
     const saltRounds = 10;
     const hash = yield bcrypt_1.default.hash(newUserInfo.password, saltRounds);
@@ -36,7 +37,7 @@ authRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const password = loginParams.password;
     const user = yield user_1.default.findOne({ username: username });
     if (!user || typeof user.id !== 'string') {
-        res.status(404).end();
+        res.status(401).end();
         return;
     }
     const hash = user.password;
@@ -55,9 +56,14 @@ authRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, functi
     const token = jsonwebtoken_1.default.sign(userToken, config_1.default.SECRET);
     res.send(token);
 }));
-/* DELETE USER check that its the user himnself logged in*/
+/* DELETE USER */
 authRouter.post('/:id/delete', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
+    const user = validation_1.validateUserToken(req.body);
+    if (user.id !== id) {
+        res.status(401).end();
+        return;
+    }
     yield user_1.default.findByIdAndDelete(id);
     res.status(200).end();
 }));

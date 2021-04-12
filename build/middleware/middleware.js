@@ -33,13 +33,14 @@ const errorHandler = (error, _request, response, next) => {
     else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message });
     }
-    else if (error.name === 'JsonWebTokenError') {
+    else if (error.name === 'JsonWebTokenError' || error.name === 'No token!') {
+        console.log('HERE');
         return response.status(401).json({
             error: 'invalid token'
         });
     }
-    else if (error.name === 'Entry missing required fields!') {
-        return response.status(400).json({ error: error.name });
+    else if (error.name === 'Incorrect or missing field' || error.name === 'Missing information!') {
+        return response.status(404).json({ error: error.name });
     }
     next(error);
 };
@@ -52,13 +53,13 @@ const tokenExtractor = (req, _res, next) => {
         next();
     }
     else {
-        console.log(req.headers.authorization);
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jsonwebtoken_1.default.verify(token, config_1.default.SECRET);
         req.body = Object.assign(Object.assign({}, req.body), { user: {
                 username: decodedToken.username,
-                _id: decodedToken.id
+                id: decodedToken.id
             } });
+        console.log(decodedToken);
         next();
     }
 };

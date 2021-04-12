@@ -1,0 +1,2 @@
+POST http://localhost:3001/api/users/6074c6a03da3436394b2a5d9/delete
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMiIsImlkIjoiNjA3NGM2NzkzZGEzNDM2Mzk0YjJhNWQ4IiwiaWF0IjoxNjE4MjY1OTE3fQ.CNNu0Rfegje2jjNhya-eKvrfpIVNODFUljV3xJwAeEs

@@ -1,9 +1,9 @@
 POST http://localhost:3001/api/recipes 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlkIjoiNjAzOTI2OWExM2Q5YWQwN2M0NmJiYWYwIiwiaWF0IjoxNjE3NzY0MjA2fQ.uE9cYe05jEpbBDiT50jkt55V5bWe_VwPRkr9JylTNzg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMiIsImlkIjoiNjA3NGM2NzkzZGEzNDM2Mzk0YjJhNWQ4IiwiaWF0IjoxNjE4MjY1NzMwfQ.xoIaoEW5R3Mk0TIbi0efaaqIJdeelriWnqVEdvVCGbg
 Content-type: application/json
 
 {
-    "title": "my test recipe 3",
+    "title": "Creator2",
     "ingredients": ["tomato", "onion"], 
     "directions": "I love typescript!:)"
 }

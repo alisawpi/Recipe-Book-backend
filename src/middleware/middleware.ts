@@ -30,12 +30,13 @@ export const errorHandler = (error: any, _request: any, response: any, next: any
         return response.status(400).send({ error: 'malformatted id' });
     } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message });
-    } else if (error.name === 'JsonWebTokenError') {
+    } else if (error.name === 'JsonWebTokenError' || error.name === 'No token!') {
+        console.log('HERE');
         return response.status(401).json({
             error: 'invalid token'
         });
-    } else if (error.name === 'Entry missing required fields!') {
-        return response.status(400).json({error: error.name});
+    } else if (error.name === 'Incorrect or missing field' || error.name === 'Missing information!') {
+        return response.status(404).json({error: error.name});
     }
     next(error);
 };
@@ -53,9 +54,10 @@ export const tokenExtractor = (req: any, _res: any, next: any) => {
             ...req.body,
             user: {
                 username: decodedToken.username, 
-                _id: decodedToken.id
+                id: decodedToken.id
             }
         };
+        console.log(decodedToken);
         next();
     }
 

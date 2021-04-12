@@ -1,39 +1,44 @@
 "use strict";
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateRecipe = exports.validateUserInfo = exports.parseStringArray = void 0;
-/*STRING */
+exports.validateRecipe = exports.validateUserToken = exports.validateUserInfo = exports.parseStringArray = void 0;
 const isString = (text) => {
     return typeof text === 'string' || text instanceof String;
 };
 const parseStringField = (name) => {
     if (!name || !isString(name)) {
-        throw new Error(`Incorrect or missing field: ${name}`);
+        throw { name: 'Incorrect or missing field' };
     }
     return name;
 };
 const parseStringArray = (array) => {
     if (!array || !Array.isArray(array) || !array.every(item => typeof item === 'string')) {
-        throw new Error(`Incorrect or missing field: ${name}`);
+        throw { name: 'Incorrect or missing field' };
     }
     return array;
 };
 exports.parseStringArray = parseStringArray;
 const validateUserInfo = (object) => {
     return {
-        username: parseStringField(object.name),
+        username: parseStringField(object.username),
         password: parseStringField(object.password)
     };
 };
 exports.validateUserInfo = validateUserInfo;
+const validateUserToken = (object) => {
+    if (!object.user)
+        throw { name: 'No token!' };
+    return {
+        username: parseStringField(object.user.username),
+        id: parseStringField(object.user.id)
+    };
+};
+exports.validateUserToken = validateUserToken;
 const validateRecipe = (object) => {
     return {
         title: parseStringField(object.title),
         ingredients: exports.parseStringArray(object.ingredients),
-        directions: parseStringField(object.directions)
+        directions: parseStringField(object.directions),
+        creator: parseStringField(object.user.id)
     };
 };
 exports.validateRecipe = validateRecipe;

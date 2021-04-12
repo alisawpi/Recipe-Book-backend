@@ -20,7 +20,8 @@ const recipeSchema = new mongoose_1.default.Schema({
     likes: Number,
     creator: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 });
 const RecipeModel = mongoose_1.default.model('Recipe', recipeSchema);

@@ -4,11 +4,13 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import config from '../utils/config';
 import { UserToken } from '../types';
-import { validateUserInfo } from '../utils/validation';
+import { validateUserInfo, validateUserToken } from '../utils/validation';
 const authRouter = express.Router();
 
+/* URL /api/users */
+
 /* SIGNUP */
-authRouter.post('/', async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
     const newUserInfo  = validateUserInfo(req.body);
     const saltRounds = 10;
     const hash = await bcrypt.hash(newUserInfo.password, saltRounds);
@@ -26,7 +28,7 @@ authRouter.post('/login', async (req, res) => {
     const password = loginParams.password;
     const user = await User.findOne({ username: username });
     if (!user || typeof user.id !== 'string' ){
-        res.status(404).end(); 
+        res.status(401).end(); 
         return; 
     }
     const hash = user.password; 
@@ -38,7 +40,6 @@ authRouter.post('/login', async (req, res) => {
     if (!config.SECRET){
         throw 'Json token secret undefined';
     }
-    console.log(user.id);
     const userToken: UserToken = {
         username: user.username, 
         id: user.id
@@ -47,9 +48,14 @@ authRouter.post('/login', async (req, res) => {
     res.send(token);
 });
 
-/* DELETE USER check that its the user himnself logged in*/
+/* DELETE USER */
 authRouter.post('/:id/delete', async (req, res) => {
     const id = req.params.id;
+    const user = validateUserToken(req.body);
+    if (user.id !== id ){
+        res.status(401).end();
+        return; 
+    }
     await User.findByIdAndDelete(id);
     res.status(200).end();
 });
