@@ -13,7 +13,12 @@ export interface Recipe extends mongoose.Document {
     likes: number, 
     creator: string
 }
-export interface UserToken {
+export interface UserTokenInfo {
     username: string, 
     id: string
+}
+export interface Rating extends mongoose.Document {
+    user: string, 
+    recipe: string, 
+    rating: number
 }

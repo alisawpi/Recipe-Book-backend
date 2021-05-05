@@ -3,7 +3,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 Content-type: application/json
 
 {
-    "title": "Creator2",
-    "ingredients": ["tomato", "onion"], 
-    "directions": "I love typescript!:)"
+    "title": "Curry",
+    "ingredients": ["chicken", "onion", "curry paste"], 
+    "directions": "I love thai food :)",
+    "cookTime": "60+"
 }

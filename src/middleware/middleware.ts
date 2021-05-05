@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
-import { UserToken } from '../types';
+import { UserTokenInfo } from '../types';
 
 const info = (...params: any[]) => {
     console.log(...params);
@@ -49,7 +49,7 @@ export const tokenExtractor = (req: any, _res: any, next: any) => {
         next();
     } else {
         const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, config.SECRET) as UserToken;
+        const decodedToken = jwt.verify(token, config.SECRET) as UserTokenInfo;
         req.body = {
             ...req.body,
             user: {

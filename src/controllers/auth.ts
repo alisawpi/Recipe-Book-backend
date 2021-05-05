@@ -3,7 +3,7 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken'; 
 import bcrypt from 'bcrypt';
 import config from '../utils/config';
-import { UserToken } from '../types';
+import { UserTokenInfo } from '../types';
 import { validateUserInfo, validateUserToken } from '../utils/validation';
 const authRouter = express.Router();
 
@@ -40,7 +40,7 @@ authRouter.post('/login', async (req, res) => {
     if (!config.SECRET){
         throw 'Json token secret undefined';
     }
-    const userToken: UserToken = {
+    const userToken: UserTokenInfo = {
         username: user.username, 
         id: user.id
     };

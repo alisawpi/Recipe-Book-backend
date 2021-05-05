@@ -14,7 +14,11 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    likes: Number,
+    cookTime: {
+        type: String, 
+        required: true
+    },
+    imgURL: String,
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', 

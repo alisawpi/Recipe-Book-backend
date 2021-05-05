@@ -8,7 +8,7 @@ import config from './utils/config';
 import mongoose from 'mongoose';
 import { logger, errorHandler, unknownEndpoint, tokenExtractor } from './middleware/middleware';
 
-
+//app.use(express.static('front_build'));
 app.use(cors());
 app.use(express.json());
 
